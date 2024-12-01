@@ -1,0 +1,15 @@
+services:
+  app:
+    entrypoint:
+    - sleep
+    - infinity
+    image: docker/dev-environments-default:stable-1
+    init: true
+    volumes:
+    - type: bind
+      source: /var/run/docker.sock
+      target: /var/run/docker.sock
+    post_start:
+      # Run the script after the container starts to install dependencies
+      - /setup-dev-env.sh
+
