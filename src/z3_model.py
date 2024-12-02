@@ -2,7 +2,7 @@ import json
 from z3 import *
 
 # Load JSON schema
-with open("k8s_schema.json") as f:
+with open("/workspaces/Z3K8s/src/k8s_schema.json") as f:
     schema = json.load(f)
 
 # Define RBAC states
@@ -13,7 +13,8 @@ users = schema.get("users", [])
 roles = schema.get("roles", [])
 permissions = schema.get("permissions", [])
 resources = schema.get("resources", [])
-
+#print(users)
+print(roles)
 # Define predicates for RBAC rules
 rules = []
 for user in users:

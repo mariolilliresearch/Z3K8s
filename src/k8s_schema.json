@@ -1,0 +1,93 @@
+{
+    "apiVersion": "v1",
+    "kind": "Config",
+    "clusters": [
+      {
+        "name": "development-cluster",
+        "cluster": {
+          "server": "https://development-cluster.example.com",
+          "certificate-authority-data": "<base64-encoded-cert>"
+        }
+      }
+    ],
+    "contexts": [
+      {
+        "name": "development-context",
+        "context": {
+          "cluster": "development-cluster",
+          "user": "developer-user",
+          "namespace": "development"
+        }
+      }
+    ],
+    "current-context": "development-context",
+    "users": [
+      {
+        "name": "developer-user",
+        "user": {
+          "token": "<developer-user-token>"
+        }
+      },
+      {
+        "name": "admin",
+        "user": {
+          "username": "admin",
+          "password": "admin123"
+        }
+      }
+    ],
+    "preferences": {},
+    "roles": [
+      {
+        "apiVersion": "rbac.authorization.k8s.io/v1",
+        "kind": "Role",
+        "metadata": {
+          "namespace": "development",
+          "name": "misconfigured-role"
+        },
+        "rules": [
+          {
+            "apiGroups": [""],
+            "resources": ["pods"],
+            "verbs": ["*"]
+          },
+          {
+            "apiGroups": ["*"],
+            "resources": ["*"],
+            "verbs": ["get", "watch", "list", "create", "delete"]
+          },
+          {
+            "apiGroups": [""],
+            "resources": ["secrets"],
+            "verbs": ["get", "create"]
+          }
+        ]
+      }
+    ],
+    "rolebindings": [
+      {
+        "apiVersion": "rbac.authorization.k8s.io/v1",
+        "kind": "RoleBinding",
+        "metadata": {
+          "namespace": "development",
+          "name": "misconfigured-rolebinding"
+        },
+        "subjects": [
+          {
+            "kind": "User",
+            "name": "developer"
+          },
+          {
+            "kind": "ServiceAccount",
+            "name": "default"
+          }
+        ],
+        "roleRef": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "Role",
+          "name": "misconfigured-role"
+        }
+      }
+    ]
+  }
+  
